@@ -1,18 +1,34 @@
 @echo off
+REM Windowsタイムサービスの確認
 sc query w32time | findstr RUNNING
-if errorlevel 1 (
+set RETURN=%ERRORLEVEL%
+
+if "%RETURN%" neq "0" (
+	REM　Windowsタイムサービスが起動していない場合は起動する。
 	net start w32time
-	sc query w32time
+	set RETURN=%ERRORLEVEL%
+
+		if "%RETURN%" neq "0" (
+			REM 起動失敗
+			echo Windowsタイムサービスの起動に失敗しました。
+			exit /b 1
+		)
 )
 
+REM 時刻同期
 w32tm /resync
-if errorlevel 1 (
+set RETURN=%ERRORLEVEL%
+
+if %RETURN% neq 1 (
+	REM 時刻同期失敗
 	echo 時刻同期に失敗しました。
+	exit /b 1
 )
 
+REM 時刻同期確認
 w32tm /query /status
 
-pause
+exit 0
 
 
 rem 参考
