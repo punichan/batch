@@ -30,3 +30,8 @@ for /f %%b in (%LISTFILE%) do (
 )
 
 pause
+
+REM 参考
+REM 管理者権限でのカレントディレクトリ：http://piyopiyocs.blog115.fc2.com/blog-entry-867.html
+REM 変数の宣言：http://capm-network.com/?tag=Windows%E3%83%90%E3%83%83%E3%83%81%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%A4%89%E6%95%B0
+REM 比較演算子：https://qiita.com/plcherrim/items/8edf3d3d33a0ae86cb5c
