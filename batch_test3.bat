@@ -31,10 +31,6 @@ for /f %%b in (%LISTFILE%) do (
 	)
 )
 
-for /f %%a in (%LISTFILE%) do (
-	sc query %%a | findstr RUNNING
-)
-
 pause
 
 REM 参考
