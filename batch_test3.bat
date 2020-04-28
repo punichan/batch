@@ -24,7 +24,7 @@ for /f %%b in (%LISTFILE%) do (
 		net stop %%b
 		set RETURN=%ERRORLEVEL%
 		
-		if !%RETURN%! neq "0" (
+		if "!RETURN!" neq "0" (
 			echo %%b停止失敗しました
 			exit /b 1
 		)
