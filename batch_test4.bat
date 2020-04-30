@@ -9,7 +9,7 @@ for /f %%a in (%LISTFILE%) do (
 	set RETURN=%ERRORLEVEL%
 
 	REM 対象のサービスが停止している場合は起動
-	if "%RETURN%" neq "0" (
+	if "!RETURN!" neq "0" (
 		net start %%a
 		set RETURN=%ERRORLEVEL%
 
