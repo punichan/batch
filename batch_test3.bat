@@ -1,37 +1,41 @@
 @echo off
 setlocal enabledelayedexpansion
-REM Windowsサービス稼働の確認
-REM set LISTFILE=C:\Users\まさみ\Documents\GitHub\batch\batch_test3.lst
-REM for /f %%a in (%LISTFILE%) do (
-REM 	sc query %%a | findstr RUNNING
-REM )
-
 
 set LISTFILE=%~dp0batch_test3.lst
-
+set FALL_FLG=0
 for /f %%a in (%LISTFILE%) do (
+	REM Windowsサービス稼働の確認
 	sc query %%a | findstr RUNNING
-)
-
-REM Windowsサービス停止
-for /f %%b in (%LISTFILE%) do (
-	net stop %%b
 	set RETURN=%ERRORLEVEL%
 	
-	REM Windowsサービス停止失敗、10秒停止後、再度停止
 	if "!RETURN!" neq "0" (
-		timeout /NOBREAK 10
-		net stop %%b
+		REM Windowsサービス停止
+		net stop %%a
 		set RETURN=%ERRORLEVEL%
-		
-		if "!RETURN!" neq "0" (
-			echo %%b停止失敗しました
-			exit /b 1
-		)
+
+			if "!RETURN!" neq "0" (
+				REM 10秒経過後再度停止を実行
+				timeout /NOBREAK 10
+				net stop %%a
+				set RETURN=%ERRORLEVEL%
+
+				if "!RETURN!" neq "0" (
+					echo %%a停止失敗しました
+					set FALL_FLG=1
+				)
+			)
+		)	
 	)
 )
 
-pause
+REM 終了時判定		
+if "%FALL_FLG%" equ "0" (
+	echo 正常終了
+	exit /b 0
+) else (
+	echo 異常終了
+	exit /b 1
+)
 
 REM 参考
 REM 管理者権限でのカレントディレクトリ：http://piyopiyocs.blog115.fc2.com/blog-entry-867.html
