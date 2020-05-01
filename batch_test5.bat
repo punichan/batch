@@ -1,7 +1,7 @@
 @echo off
 
-REM バックアップされた日付
-set REN_DATE=%date:~0,4%%date:~5,2%%date:~8,2%
+REM バックアップされた日付の変数
+set BACKUP_DATE=%date:~0,4%%date:~5,2%%date:~8,2%
 
 REM WindowsServerバックアップ実行
 wbadmin start backup -backuptarget:E: -include:C:
