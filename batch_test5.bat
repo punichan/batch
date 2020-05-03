@@ -3,7 +3,7 @@
 set BACKUP_FLD=E:\WindowsImageBackup
 
 REM WIN2016というファイル名があるかを確認
-dir /b %BACKUP_FLD% | findstr "Win2016"
+dir /b %BACKUP_FLD% | findstr /x "Win2016"
 set RETURN=%ERRORLEVEL%
 
 REM WIN2016というファイル名があればバックアップ不可
