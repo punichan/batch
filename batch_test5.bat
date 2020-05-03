@@ -13,7 +13,7 @@ if %RETURN% equ 0 (
 )
 
 REM WindowsServerバックアップ実行
-wbadmin start backup -backuptarget:E: -include:C:
+wbadmin start backup -backuptarget:E: -include:C: -quiet
 
 REM バックアップファイルのリネーム
 set BACKUP_DATE=%date:~0,4%%date:~5,2%%date:~8,2%
