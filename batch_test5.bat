@@ -25,7 +25,7 @@ if "!RETURN!" neq "0" (
 REM バックアップファイルのリネーム
 set BACKUP_DATE=%date:~0,4%%date:~5,2%%date:~8,2%
 
-ren %BACKUP_FLD%\Win2016 Win2016_%REN_DATE%
+ren %BACKUP_FLD%\Win2016 Win2016_%BACKUP_DATE%
 set RETURN=%ERRORLEVEL%
 
 REM リネームに失敗した場合、異常終了
