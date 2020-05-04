@@ -14,13 +14,6 @@ if "%RETURN%" equ "0" (
 
 REM WindowsServerバックアップ実行
 wbadmin start backup -backuptarget:E: -include:C: -quiet
-set RETURN=%ERRORLEVEL%
-
-REM バックアップを正常に行えなかった場合、異常終了
-if "!RETURN!" neq "0" (
-	echo バックアップを正常に行えませんでした。
-	exit /b 1
-)
 
 REM バックアップファイルのリネーム
 set BACKUP_DATE=%date:~0,4%%date:~5,2%%date:~8,2%
