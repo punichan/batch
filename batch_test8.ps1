@@ -1,0 +1,1 @@
+PowerShell Compress-Archive -Path C:\Work\* -DestinationPath D:\test8.zip -Force
