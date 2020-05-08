@@ -38,5 +38,6 @@ if exist %DRVNAME% (
 
 REM カウンター（FREE SPACE）参考：https://www.sskpc.net/sskpc/w2003s/ch6/6_7_1.html
 REM findstrコマンドのオプション参考：https://www.k-tanaka.net/cmd/findstr.php
-
+REM 変数を分割してセット参考：https://www.adminweb.jp/command/bat/index10.html
+REM typeperfコマンド参考：https://docs.microsoft.com/ja-jp/windows-server/administration/windows-commands/typeperf
 
