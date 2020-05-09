@@ -1,4 +1,5 @@
 @echo off
+setlocal ENABLEDELAYEDEXPANSION
 
 REM 環境変数をセットする
 set WARN=80
@@ -13,31 +14,31 @@ if "%1" equ "" (
 REM 引数を変数にセットする
 set DRVNAME=%1:
 
-REM 実行日時をlogに出力する
-echo %date% > %~dp0batch_test9.log
-
-REM 一時ファイルのパス
-set TMP_FILE=%~dp0batch_test9.txt
-
 REM 引数で与えられたドライブの存在確認
-if exist %DRVNAME% (
-    REM 存在していれば、一時ファイルに書き込む。
-    typeperf -sc 1 -si 1 "\LogicalDisk(%DRVNAME%)\% Free Space" -o %TMP_FILE% -y
-    findstr /v Free %TMP_FILE% > %TMP_FILE%
+if not exist %DRVNAME% (
+    REM 存在しなければ、異常終了
+    echo 指定されたドライバは存在しません。
+    echo 指定されたドライバは存在しません。 > %DRVNAME%\Work\batch_test9.log
+    exit /b 1
 
-    for /f "delims=, tokens=1-2" %%a in (%TMP_FILE%) do (
-        set COL1 = %%a
-        set COL2 = %%b
-    )
 ) else (
-        REM 存在しなければ、異常終了
-        echo 指定されたドライバは存在しません。
-        echo 指定されたドライバは存在しません。 > %~dp0batch_test9.log
-        exit /b 1
+    REM 存在していれば、一時ファイルに書き込む。
+    typeperf -sc 1 -si 1 "\LogicalDisk(%DRVNAME%)\%% Free Space" -o %DRVNAME%\Work\batch_test9.txt -y
+    findstr /v "Free" %DRVNAME%\Work\batch_test9.txt > %DRVNAME%\Work\batch_test9.txt.log
+
+    REM 一時ファイルから変数のセット
+    for /f "delims=, tokens=1-2" %%a in (%DRVNAME%\Work\batch_test9.txt.log) do (
+        set COL1=%%~a
+        set COL2=%%~b
     )
+)
+
+REM カラム2の変数がセットされているか確認 
+echo !COL2!
+
 
 REM カウンター（FREE SPACE）参考：https://www.sskpc.net/sskpc/w2003s/ch6/6_7_1.html
 REM findstrコマンドのオプション参考：https://www.k-tanaka.net/cmd/findstr.php
-REM 変数を分割してセット参考：https://www.adminweb.jp/command/bat/index10.html
-REM typeperfコマンド参考：https://docs.microsoft.com/ja-jp/windows-server/administration/windows-commands/typeperf
-
+typeperfコマンド参考：https://4thsight.xyz/14738
+変数から""を取り除く参考：https://qiita.com/tomotagwork/items/5b9e08f28d5925d96b5f
+echoはoffです解消参考：https://www.google.com/search?sxsrf=ALeKk01xlJL5VFeEdqWDIAYvgy8oWcP6NA%3A1588990955034&ei=6xO2XqjXAaTfmAXI6IKICQ&q=echo%E3%81%AFoff%E3%81%A7%E3%81%99&oq=echo%E3%81%AF&gs_lcp=CgZwc3ktYWIQARgAMgIIADICCAAyBAgAEAQyBAgAEAQyAggAMgIIADoHCAAQRhD_AToHCCMQ6gIQJzoECCMQJzoHCAAQgwEQBDoECAAQQzoFCAAQgwFQqftHWKWhSGDBs0hoAnAAeAGAAfoDiAGCF5IBCTAuNi42LjUtMZgBAKABAaoBB2d3cy13aXqwAQo&sclient=psy-ab
