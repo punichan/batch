@@ -25,39 +25,44 @@ if not exist %DRVNAME% (
     exit /b 1
 )
 
-REM 存在していれば、一時ファイルに書き込む。
+REM ドライブが存在するか確認
 if exist %DRVNAME% (
+    REM ドライブのフリースペースを取得、一時ファイルに読みだす。
     typeperf -sc 1 -si 1 "\LogicalDisk(%DRVNAME%)\%% Free Space" -o %~dp0batch_test9.txt -y
-    for /f "delims=. tokens=1-2 USEBACKQ" %%c in (`findstr /v "Free Space" %~dp0batch_test9.txt`) do (
-        set NUM1=%%~c
-        set NUM2=%%~d
-        echo !NUM1!
+    for /f "delims=, tokens=1-2 USEBACKQ" %%c in (`findstr /v "Free Space" %~dp0batch_test9.txt`) do (
+        set NITIJI=%%~c
+        set FREESPACE=%%~d
+
+        REM 変数FREESPACEに値がセットされているかを確認
+        if defined FREESPACE (
+            REM 設定されている場合、変数の内容を1行ずつ読みだす
+            for /F "DELIMS=. TOKENS=1-2 USEBACKQ" %%e IN (`echo !FREESPACE!`) do (
+                set FREESP1=%%e
+                set FREESP2=%%f
+                set /A USAGE=100-!FREESP1!
+
+                REM ディスク使用率とクリティカル闘値を比較
+                if !USAGE! geq !CRIT! (
+                    REM　NUM3のほうが%CRIT%以上の場合
+                    echo ディスク使用率がクリティカルの値を超えています。
+                    echo ディスク使用率がクリティカルの値を超えています。 > %DRVNAME%\Work\batch_test9.log
+                    del /q %DRVNAME%batch_test9.txt
+                ) else (
+                    REM ディスク使用率と警告闘値を比較
+                    if !USAGE! geq !WARN! (
+                        REM NUM3のほうが%WARN%以上の場合
+                        echo ディスク使用率が警告の値を超えています。
+                        echo ディスク使用率が警告の値を超えています。 > %DRVNAME%\Work\batch_test9.log
+                        del /q %DRVNAME%\Work\batch_test9.txt
+                    )
+                )
+            )
+        )
     )
 )
-REM REM 100からNUM1を引き算する
-REM set /a NUM3=100-!NUM1!
-REM echo %NUM3%
 
-REM REM NUM3と、変数CRITの値を比較する。
-REM if %NUM3% geq %CRIT% (
-REM     REM NUM3のほうが%CRIT%以上の場合
-REM     echo ディスク使用率がクリティカルの値を超えています。
-REM     echo ディスク使用率がクリティカルの値を超えています。 > %DRVNAME%\Work\batch_test9.log
-REM     del /q %DRVNAME%\Work\batch_test9.txt.log
-REM     del /q %DRVNAME%\Work\batch_test9.txt
-REM     echo 1
 
-REM ) else if %NUM3% lss %CRIT% (
-REM     REM NUM3のほうが%CRIT%未満の場合
-REM     echo 2
 
-REM     if %NUM3% geq %WARN% (
-REM         REM NUM3のほうが%WARN%以上の場合
-REM         echo ディスク使用率が警告の値を超えています。
-REM         echo ディスク使用率が警告の値を超えています。 > %DRVNAME%\Work\batch_test9.log
-REM         del /q %DRVNAME%\Work\batch_test9.txt.log
-REM         del /q %DRVNAME%\Work\batch_test9.txt
-REM         echo 3
 
 REM     ) else if %NUM3% lss %WARN% (
 REM         REM NUM3のほうが%WARN%未満の場合
@@ -80,3 +85,5 @@ REM REM for /fの使い方：https://www.lisz-works.com/entry/bat-split-for-f
 REM REM バッチ内での計算：https://jj-blues.com/cms/wantto-calculationinbatfile/
 REM REM 比較演算子：https://qiita.com/plcherrim/items/8edf3d3d33a0ae86cb5c
 REM REM ファイル削除の仕方：https://www.k-tanaka.net/cmd/del.php
+REM for /fのオプション：https://www.keicode.com/windows/for-command.php
+REM if defined 変数が設定されているか確認する：https://maku77.github.io/windows/batch/check-env-var.html
