@@ -1,4 +1,4 @@
-@echo off
+REM @echo off
 setlocal enabledelayedexpansion
 
 REM 環境変数をセットする
@@ -8,63 +8,63 @@ set CRIT=60
 REM 引数を変数にセットする
 set DRVNAME=%1:
 
-REM ログファイルの作成
-copy nul %~dp0batch_test9.log
 set LOG_FILE=%~dp0batch_test9.log
 
 REM 引数があるかを確認・なければ異常終了させる
 if "%1" equ "" (
-    echo 引数が指定されていません。
+    echo 引数が指定されていません
     exit /b 1
 )
 
 REM 引数で与えられたドライブの存在確認
 if not exist %DRVNAME% (
     REM 存在しなければ、異常終了
-    echo 指定されたドライバは存在しません。 > %LOG_FILE%
+    echo 指定されたドライブは存在しません >  %LOG_FILE%
     exit /b 1
 )
 
 REM ドライブが存在するか確認
 if exist %DRVNAME% (
-
     REM ドライブのフリースペースを取得、一時ファイルに読みだす。
     typeperf -sc 1 -si 1 "\LogicalDisk(%DRVNAME%)\%% Free Space" -o %~dp0batch_test9.txt -y
     for /f "delims=, tokens=1-2 USEBACKQ" %%c in (`findstr /v "Free Space" %~dp0batch_test9.txt`) do (
         set NITIJI=%%~c
-        set FREESPACE=%%~d
-        
+        set FREESPACE=%%~d   
         REM　一時ファイルを削除
         del /q %~dp0batch_test9.txt
+    )
 
-        REM 変数FREESPACEに値がセットされているかを確認
-        if defined FREESPACE (
-            REM 設定されている場合、変数の内容を1行ずつ読みだす
-            for /F "DELIMS=. TOKENS=1-2 USEBACKQ" %%e IN (`echo !FREESPACE!`) do (
-                set FREESP1=%%e
-                set FREESP2=%%f
-                set /A USAGE=100-!FREESP1!
-
-                REM ディスク使用率とクリティカル闘値を比較
-                if !USAGE! geq !CRIT! (
-                    REM　NUM3のほうが%CRIT%以上の場合
-                    echo ディスク使用率がクリティカルの値を超えています。 > !LOG_FILE!
-                ) else (
-                    REM ディスク使用率と警告闘値を比較
-                    if !USAGE! geq !WARN! (
-                        REM NUM3のほうが%WARN%以上の場合
-                        echo ディスク使用率が警告の値を超えています。 > !LOG_FILE!
-                    )
-                )
-                REM ドライブ名とディスクの使用率を出力
-                echo !DRVNAME!!USAGE! > %LOG_FILE%
-            )
-        ) else (
-            REM ドライブが存在しない場合
-            echo ドライブが存在しません。!DRVNAME!
+    REM 変数FREESPACEに値がセットされているかを確認
+    if defined FREESPACE (
+        REM 設定されている場合、変数の内容を1行ずつ読みだす
+        for /F "DELIMS=. TOKENS=1-2 USEBACKQ" %%e IN (`echo !FREESPACE!`) do (
+            set FREESP1=%%e
+            set FREESP2=%%f
+            set /A USAGE=100-!FREESP1!
         )
+        echo !USAGE!
+        REM ディスク使用率とクリティカル闘値を比較
+        if !USAGE! geq %CRIT% (
+            REM　NUM3のほうが%CRIT%以上の場合
+            echo ディスク使用率がクリティカルの値を超えています。 >> !LOG_FILE!
+            
+        ) else (
+            REM ディスク使用率と警告闘値を比較
+            if !USAGE! geq !WARN! (
+                REM NUM3のほうが%WARN%以上の場合
+                echo ディスク使用率が警告の値を超えています。 >> !LOG_FILE!
+            )
+        )
+
+        REM ドライブ名とディスクの使用率を出力
+        echo !DRVNAME!!USAGE! >> %LOG_FILE%
+        
+    ) else (
+        REM ドライブが存在しない場合
+        echo ドライブが存在しません。!DRVNAME!
     )
 )
+
 exit /b 0
 
 REM カウンター（FREE SPACE）参考：https://www.sskpc.net/sskpc/w2003s/ch6/6_7_1.html

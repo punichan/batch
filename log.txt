@@ -1,0 +1,95 @@
+
+C:\Users\まさみ\Documents\GitHub\batch>REM @echo off 
+
+C:\Users\まさみ\Documents\GitHub\batch>setlocal enabledelayedexpansion 
+
+C:\Users\まさみ\Documents\GitHub\batch>REM 迺ｰ蠅・､画焚繧偵そ繝・ヨ縺吶ｋ 
+
+C:\Users\まさみ\Documents\GitHub\batch>set WARN=50 
+
+C:\Users\まさみ\Documents\GitHub\batch>set CRIT=60 
+
+C:\Users\まさみ\Documents\GitHub\batch>REM 蠑墓焚繧貞､画焚縺ｫ繧ｻ繝・ヨ縺吶ｋ 
+
+C:\Users\まさみ\Documents\GitHub\batch>set DRVNAME=c: 
+
+C:\Users\まさみ\Documents\GitHub\batch>set LOG_FILE=c:\Users\まさみ\Documents\GitHub\batch\batch_test9.log 
+
+C:\Users\まさみ\Documents\GitHub\batch>REM 蠑墓焚縺後≠繧九°繧堤｢ｺ隱阪・縺ｪ縺代ｌ縺ｰ逡ｰ蟶ｸ邨ゆｺ・＆縺帙ｋ 
+
+C:\Users\まさみ\Documents\GitHub\batch>if "c" EQU "" (
+echo 蠑墓焚縺梧欠螳壹＆繧後※縺・∪縺帙ｓ  
+ exit /b 1 
+) 
+
+C:\Users\まさみ\Documents\GitHub\batch>REM 蠑墓焚縺ｧ荳弱∴繧峨ｌ縺溘ラ繝ｩ繧､繝悶・蟄伜惠遒ｺ隱・ 
+
+C:\Users\まさみ\Documents\GitHub\batch>if not exist c: (
+REM 蟄伜惠縺励↑縺代ｌ縺ｰ縲∫焚蟶ｸ邨ゆｺ・  
+ 溘ラ繝ｩ繧､繝悶・蟄伜惠縺励∪縺帙ｓ  1>c:\Users\まさみ\Documents\GitHub\batch\batch_test9.log  
+ exit /b 1 
+) 
+
+C:\Users\まさみ\Documents\GitHub\batch>REM 繝峨Λ繧､繝悶′蟄伜惠縺吶ｋ縺狗｢ｺ隱・ 
+
+C:\Users\まさみ\Documents\GitHub\batch>if exist c: (
+REM 繝峨Λ繧､繝悶・繝輔Μ繝ｼ繧ｹ繝壹・繧ｹ繧貞叙蠕励∽ｸ譎ゅヵ繧｡繧､繝ｫ縺ｫ隱ｭ縺ｿ縺縺吶・  
+ typeperf -sc 1 -si 1 "\LogicalDisk(c:)\% Free Space" -o c:\Users\まさみ\Documents\GitHub\batch\batch_test9.txt -y  
+ for /F "delims=, tokens=1-2 USEBACKQ" %c in (`findstr /v "Free Space" c:\Users\まさみ\Documents\GitHub\batch\batch_test9.txt`) do (
+set NITIJI=%~c  
+ set FREESPACE=%~d     
+ REM縲荳譎ゅヵ繧｡繧､繝ｫ繧貞炎髯､ 
+ del /q c:\Users\まさみ\Documents\GitHub\batch\batch_test9.txt 
+)  
+ REM 螟画焚FREESPACE縺ｫ蛟､縺後そ繝・ヨ縺輔ｌ縺ｦ縺・ｋ縺九ｒ遒ｺ隱・  
+ if defined FREESPACE (
+REM 險ｭ螳壹＆繧後※縺・ｋ蝣ｴ蜷医∝､画焚縺ｮ蜀・ｮｹ繧・陦後★縺､隱ｭ縺ｿ縺縺・  
+ for /F "DELIMS=. TOKENS=1-2 USEBACKQ" %e IN (`echo !FREESPACE!`) do (
+set FREESP1=%e  
+ set FREESP2=%f  
+ set /A USAGE=100-!FREESP1! 
+)  
+ echo !USAGE!  
+ REM 繝・ぅ繧ｹ繧ｯ菴ｿ逕ｨ邇・→繧ｯ繝ｪ繝・ぅ繧ｫ繝ｫ髣伜､繧呈ｯ碑ｼ・  
+ if !USAGE! GEQ 60 (
+REM縲NUM3縺ｮ縺ｻ縺・′60莉･荳翫・蝣ｴ蜷・ 
+ ｽｿ逕ｨ邇・′繧ｯ繝ｪ繝・ぅ繧ｫ繝ｫ縺ｮ蛟､繧定ｶ・∴縺ｦ縺・∪縺吶・1>>!LOG_FILE! 
+)  else (
+REM 繝・ぅ繧ｹ繧ｯ菴ｿ逕ｨ邇・→隴ｦ蜻企利蛟､繧呈ｯ碑ｼ・  
+ if !USAGE! GEQ !WARN! (
+REM NUM3縺ｮ縺ｻ縺・′50莉･荳翫・蝣ｴ蜷・  
+ ｣繧ｹ繧ｯ菴ｿ逕ｨ邇・′隴ｦ蜻翫・蛟､繧定ｶ・∴縺ｦ縺・∪縺吶・1>>!LOG_FILE! 
+) 
+)  
+ REM 繝峨Λ繧､繝門錐縺ｨ繝・ぅ繧ｹ繧ｯ縺ｮ菴ｿ逕ｨ邇・ｒ蜃ｺ蜉・  
+ echo !DRVNAME!!USAGE!  1>>c:\Users\まさみ\Documents\GitHub\batch\batch_test9.log 
+)  else (
+REM 繝峨Λ繧､繝悶′蟄伜惠縺励↑縺・ｴ蜷・  
+ ｩ繧､繝悶′蟄伜惠縺励∪縺帙ｓ縲・DRVNAME!
+) 
+) 
+
+終了しています。お待ちください...                        　　　　　　　　　　　　　　
+コマンドは、正しく完了しました。
+
+C:\Users\まさみ\Documents\GitHub\batch>(
+set NITIJI=05/22/2020 12:31:55.909  
+ set FREESPACE=27.801333772435370406     
+ REM縲荳譎ゅヵ繧｡繧､繝ｫ繧貞炎髯､ 
+ del /q c:\Users\まさみ\Documents\GitHub\batch\batch_test9.txt 
+) 
+'REM縲荳譎ゅヵ繧｡繧､繝ｫ繧貞炎髯､' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+
+C:\Users\まさみ\Documents\GitHub\batch>(
+set FREESP1=27  
+ set FREESP2=801333772435370406     
+ set /A USAGE=100-!FREESP1! 
+) 
+73
+'REM縲NUM3縺ｮ縺ｻ縺・′60莉･荳翫・蝣ｴ蜷・' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+'ｽｿ逕ｨ邇・′繧ｯ繝ｪ繝・ぅ繧ｫ繝ｫ縺ｮ蛟､繧定ｶ・∴縺ｦ縺・∪縺吶・' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+
+C:\Users\まさみ\Documents\GitHub\batch>exit /b 0 
