@@ -1,6 +1,8 @@
 REM @echo off
 setlocal enabledelayedexpansion
 
+set TIME=[%date%]
+
 REM 環境変数をセットする
 set WARN=50
 set CRIT=60
@@ -19,7 +21,7 @@ if "%1" equ "" (
 REM 引数で与えられたドライブの存在確認
 if not exist %DRVNAME% (
     REM 存在しなければ、異常終了
-    echo 指定されたドライブは存在しません >  %LOG_FILE%
+    echo %TIME% 指定されたドライブは存在しません >  %LOG_FILE%
     exit /b 1
 )
 
@@ -42,22 +44,22 @@ if exist %DRVNAME% (
             set FREESP2=%%f
             set /A USAGE=100-!FREESP1!
         )
-        echo !USAGE!
+
         REM ディスク使用率とクリティカル闘値を比較
         if !USAGE! geq %CRIT% (
             REM　NUM3のほうが%CRIT%以上の場合
-            echo ディスク使用率がクリティカルの値を超えています。 >> !LOG_FILE!
+            echo %TIME%ディスク使用率がクリティカルの値を超えています。 >> !LOG_FILE!
             
         ) else (
             REM ディスク使用率と警告闘値を比較
             if !USAGE! geq !WARN! (
                 REM NUM3のほうが%WARN%以上の場合
-                echo ディスク使用率が警告の値を超えています。 >> !LOG_FILE!
+                echo %TIME%ディスク使用率が警告の値を超えています。 >> !LOG_FILE!
             )
         )
 
         REM ドライブ名とディスクの使用率を出力
-        echo !DRVNAME!!USAGE! >> %LOG_FILE%
+        echo %TIME%!DRVNAME!!USAGE! >> %LOG_FILE%
         
     ) else (
         REM ドライブが存在しない場合
