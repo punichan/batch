@@ -1,80 +1,80 @@
 REM @echo off
 setlocal enabledelayedexpansion
 
-REM ç’°å¢ƒå¤‰æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+REM ŠÂ‹«•Ï”‚ğƒZƒbƒg‚·‚é
 set WARN=50
 set CRIT=60
 
-REM å¼•æ•°ã‚’å¤‰æ•°ã«ã‚»ãƒƒãƒˆã™ã‚‹
+REM ˆø”‚ğ•Ï”‚ÉƒZƒbƒg‚·‚é
 set DRVNAME=%1:
 
 set LOG_FILE=%~dp0batch_test9.log
 
-REM å¼•æ•°ãŒã‚ã‚‹ã‹ã‚’ç¢ºèªãƒ»ãªã‘ã‚Œã°ç•°å¸¸çµ‚äº†ã•ã›ã‚‹
+REM ˆø”‚ª‚ ‚é‚©‚ğŠm”FE‚È‚¯‚ê‚ÎˆÙíI—¹‚³‚¹‚é
 if "%1" equ "" (
-    echo å¼•æ•°ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“
+    echo ˆø”‚ªw’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ
     exit /b 1
 )
 
-REM å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ‰ãƒ©ã‚¤ãƒ–ã®å­˜åœ¨ç¢ºèª
+REM ˆø”‚Å—^‚¦‚ç‚ê‚½ƒhƒ‰ƒCƒu‚Ì‘¶İŠm”F
 if not exist %DRVNAME% (
-    REM å­˜åœ¨ã—ãªã‘ã‚Œã°ã€ç•°å¸¸çµ‚äº†
-    echo æŒ‡å®šã•ã‚ŒãŸãƒ‰ãƒ©ã‚¤ãƒ–ã¯å­˜åœ¨ã—ã¾ã›ã‚“ >  %LOG_FILE%
+    REM ‘¶İ‚µ‚È‚¯‚ê‚ÎAˆÙíI—¹
+    echo w’è‚³‚ê‚½ƒhƒ‰ƒCƒu‚Í‘¶İ‚µ‚Ü‚¹‚ñ >  %LOG_FILE%
     exit /b 1
 )
 
-REM ãƒ‰ãƒ©ã‚¤ãƒ–ãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèª
+REM ƒhƒ‰ƒCƒu‚ª‘¶İ‚·‚é‚©Šm”F
 if exist %DRVNAME% (
-    REM ãƒ‰ãƒ©ã‚¤ãƒ–ã®ãƒ•ãƒªãƒ¼ã‚¹ãƒšãƒ¼ã‚¹ã‚’å–å¾—ã€ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã«èª­ã¿ã ã™ã€‚
+    REM ƒhƒ‰ƒCƒu‚ÌƒtƒŠ[ƒXƒy[ƒX‚ğæ“¾Aˆêƒtƒ@ƒCƒ‹‚É“Ç‚İ‚¾‚·B
     typeperf -sc 1 -si 1 "\LogicalDisk(%DRVNAME%)\%% Free Space" -o %~dp0batch_test9.txt -y
     for /f "delims=, tokens=1-2 USEBACKQ" %%c in (`findstr /v "Free Space" %~dp0batch_test9.txt`) do (
         set NITIJI=%%~c
         set FREESPACE=%%~d   
-        REMã€€ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤
+        REM@ˆêƒtƒ@ƒCƒ‹‚ğíœ
         del /q %~dp0batch_test9.txt
     )
 
-    REM å¤‰æ•°FREESPACEã«å€¤ãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã‹ã‚’ç¢ºèª
-    if defined FREESPACE (
-        REM è¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã€å¤‰æ•°ã®å†…å®¹ã‚’1è¡Œãšã¤èª­ã¿ã ã™
+    REM •Ï”FREESPACE‚É’l‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚é‚©‚ğŠm”F
+    if defined FREESPACE (  
+        REM İ’è‚³‚ê‚Ä‚¢‚éê‡A•Ï”‚Ì“à—e‚ğ1s‚¸‚Â“Ç‚İ‚¾‚·
         for /F "DELIMS=. TOKENS=1-2 USEBACKQ" %%e IN (`echo !FREESPACE!`) do (
             set FREESP1=%%e
             set FREESP2=%%f
             set /A USAGE=100-!FREESP1!
         )
         echo !USAGE!
-        REM ãƒ‡ã‚£ã‚¹ã‚¯ä½¿ç”¨ç‡ã¨ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«é—˜å€¤ã‚’æ¯”è¼ƒ
+        REM ƒfƒBƒXƒNg—p—¦‚ÆƒNƒŠƒeƒBƒJƒ‹“¬’l‚ğ”äŠr
         if !USAGE! geq %CRIT% (
-            REMã€€NUM3ã®ã»ã†ãŒ%CRIT%ä»¥ä¸Šã®å ´åˆ
-            echo ãƒ‡ã‚£ã‚¹ã‚¯ä½¿ç”¨ç‡ãŒã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã®å€¤ã‚’è¶…ãˆã¦ã„ã¾ã™ã€‚ >> !LOG_FILE!
+            REM@NUM3‚Ì‚Ù‚¤‚ª%CRIT%ˆÈã‚Ìê‡
+            echo ƒfƒBƒXƒNg—p—¦‚ªƒNƒŠƒeƒBƒJƒ‹‚Ì’l‚ğ’´‚¦‚Ä‚¢‚Ü‚·B >> !LOG_FILE!
             
         ) else (
-            REM ãƒ‡ã‚£ã‚¹ã‚¯ä½¿ç”¨ç‡ã¨è­¦å‘Šé—˜å€¤ã‚’æ¯”è¼ƒ
+            REM ƒfƒBƒXƒNg—p—¦‚ÆŒx“¬’l‚ğ”äŠr
             if !USAGE! geq !WARN! (
-                REM NUM3ã®ã»ã†ãŒ%WARN%ä»¥ä¸Šã®å ´åˆ
-                echo ãƒ‡ã‚£ã‚¹ã‚¯ä½¿ç”¨ç‡ãŒè­¦å‘Šã®å€¤ã‚’è¶…ãˆã¦ã„ã¾ã™ã€‚ >> !LOG_FILE!
+                REM NUM3‚Ì‚Ù‚¤‚ª%WARN%ˆÈã‚Ìê‡
+                echo ƒfƒBƒXƒNg—p—¦‚ªŒx‚Ì’l‚ğ’´‚¦‚Ä‚¢‚Ü‚·B >> !LOG_FILE!
             )
         )
 
-        REM ãƒ‰ãƒ©ã‚¤ãƒ–åã¨ãƒ‡ã‚£ã‚¹ã‚¯ã®ä½¿ç”¨ç‡ã‚’å‡ºåŠ›
+        REM ƒhƒ‰ƒCƒu–¼‚ÆƒfƒBƒXƒN‚Ìg—p—¦‚ğo—Í
         echo !DRVNAME!!USAGE! >> %LOG_FILE%
         
     ) else (
-        REM ãƒ‰ãƒ©ã‚¤ãƒ–ãŒå­˜åœ¨ã—ãªã„å ´åˆ
-        echo ãƒ‰ãƒ©ã‚¤ãƒ–ãŒå­˜åœ¨ã—ã¾ã›ã‚“ã€‚!DRVNAME!
+        REM ƒhƒ‰ƒCƒu‚ª‘¶İ‚µ‚È‚¢ê‡
+        echo ƒhƒ‰ƒCƒu‚ª‘¶İ‚µ‚Ü‚¹‚ñB!DRVNAME!
     )
 )
 
 exit /b 0
 
-REM ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ï¼ˆFREE SPACEï¼‰å‚è€ƒï¼šhttps://www.sskpc.net/sskpc/w2003s/ch6/6_7_1.html
-REM findstrã‚³ãƒãƒ³ãƒ‰ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³å‚è€ƒï¼šhttps://www.k-tanaka.net/cmd/findstr.php
-REM typeperfã‚³ãƒãƒ³ãƒ‰å‚è€ƒï¼šhttps://4thsight.xyz/14738
-REM å¤‰æ•°ã‹ã‚‰""ã‚’å–ã‚Šé™¤ãå‚è€ƒï¼šhttps://qiita.com/tomotagwork/items/5b9e08f28d5925d96b5f
-REM echoã¯offã§ã™è§£æ¶ˆå‚è€ƒï¼šhttps://www.google.com/search?sxsrf=ALeKk01xlJL5VFeEdqWDIAYvgy8oWcP6NA%3A1588990955034&ei=6xO2XqjXAaTfmAXI6IKICQ&q=echo%E3%81%AFoff%E3%81%A7%E3%81%99&oq=echo%E3%81%AF&gs_lcp=CgZwc3ktYWIQARgAMgIIADICCAAyBAgAEAQyBAgAEAQyAggAMgIIADoHCAAQRhD_AToHCCMQ6gIQJzoECCMQJzoHCAAQgwEQBDoECAAQQzoFCAAQgwFQqftHWKWhSGDBs0hoAnAAeAGAAfoDiAGCF5IBCTAuNi42LjUtMZgBAKABAaoBB2d3cy13aXqwAQo&sclient=psy-ab
-REM for /fã®ä½¿ã„æ–¹ï¼šhttps://www.lisz-works.com/entry/bat-split-for-f
-REM ãƒãƒƒãƒå†…ã§ã®è¨ˆç®—ï¼šhttps://jj-blues.com/cms/wantto-calculationinbatfile/
-REM æ¯”è¼ƒæ¼”ç®—å­ï¼šhttps://qiita.com/plcherrim/items/8edf3d3d33a0ae86cb5c
-REM ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ã®ä»•æ–¹ï¼šhttps://www.k-tanaka.net/cmd/del.php
-REM for /fã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼šhttps://www.keicode.com/windows/for-command.php
-REM if defined å¤‰æ•°ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹ã‹ç¢ºèªã™ã‚‹ï¼šhttps://maku77.github.io/windows/batch/check-env-var.html
+REM ƒJƒEƒ“ƒ^[iFREE SPACEjQlFhttps://www.sskpc.net/sskpc/w2003s/ch6/6_7_1.html
+REM findstrƒRƒ}ƒ“ƒh‚ÌƒIƒvƒVƒ‡ƒ“QlFhttps://www.k-tanaka.net/cmd/findstr.php
+REM typeperfƒRƒ}ƒ“ƒhQlFhttps://4thsight.xyz/14738
+REM •Ï”‚©‚ç""‚ğæ‚èœ‚­QlFhttps://qiita.com/tomotagwork/items/5b9e08f28d5925d96b5f
+REM echo‚Íoff‚Å‚·‰ğÁQlFhttps://www.google.com/search?sxsrf=ALeKk01xlJL5VFeEdqWDIAYvgy8oWcP6NA%3A1588990955034&ei=6xO2XqjXAaTfmAXI6IKICQ&q=echo%E3%81%AFoff%E3%81%A7%E3%81%99&oq=echo%E3%81%AF&gs_lcp=CgZwc3ktYWIQARgAMgIIADICCAAyBAgAEAQyBAgAEAQyAggAMgIIADoHCAAQRhD_AToHCCMQ6gIQJzoECCMQJzoHCAAQgwEQBDoECAAQQzoFCAAQgwFQqftHWKWhSGDBs0hoAnAAeAGAAfoDiAGCF5IBCTAuNi42LjUtMZgBAKABAaoBB2d3cy13aXqwAQo&sclient=psy-ab
+REM for /f‚Ìg‚¢•ûFhttps://www.lisz-works.com/entry/bat-split-for-f
+REM ƒoƒbƒ`“à‚Å‚ÌŒvZFhttps://jj-blues.com/cms/wantto-calculationinbatfile/
+REM ”äŠr‰‰ZqFhttps://qiita.com/plcherrim/items/8edf3d3d33a0ae86cb5c
+REM ƒtƒ@ƒCƒ‹íœ‚Ìd•ûFhttps://www.k-tanaka.net/cmd/del.php
+REM for /f‚ÌƒIƒvƒVƒ‡ƒ“Fhttps://www.keicode.com/windows/for-command.php
+REM if defined •Ï”‚ªİ’è‚³‚ê‚Ä‚¢‚é‚©Šm”F‚·‚éFhttps://maku77.github.io/windows/batch/check-env-var.html
