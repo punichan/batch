@@ -74,15 +74,15 @@ REM ドライブが存在しない場合
 コマンドは、正しく完了しました。
 
 C:\Work>(
-set NITIJI=05/26/2020 12:12:42.889  
- set FREESPACE=26.557714473900873031     
+set NITIJI=05/26/2020 12:17:45.738  
+ set FREESPACE=26.556891157582747098     
  REM　一時ファイルを削除  
  del /q c:\Users\まさみ\Documents\GitHub\batch\batch_test9.txt 
 ) 
 
 C:\Work>(
 set FREESP1=26  
- set FREESP2=557714473900873031     
+ set FREESP2=556891157582747098     
  set /A USAGE=100-!FREESP1! 
 ) 
 
