@@ -23,6 +23,7 @@ for /l %%n in (1,1,9999) do (
     ping -n 3 127.0.0.1>nul
 )
 
+exit /b 0
 REM ####################################################################################################
 REM #参考サイト一覧
 REM #スリーブの仕方：https://www.delftstack.com/ja/howto/batch/how-to-sleep-or-wait-x-seconds-in-a-bat-file/
