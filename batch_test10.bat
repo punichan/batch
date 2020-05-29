@@ -17,10 +17,10 @@ REM ############################################################################
 REM 9999回繰り返す処理
 for /l %%n in (1,1,9999) do (
     REM batch_test9.batを呼び出す
-    call %~dp0batch_test9.bat
+    call %~dp0batch_test9.bat　C
 
     REM 15分スリーブさせる
-    ping -n 3 127.0.0.1>nul
+    ping -n 900 127.0.0.1>nul
 )
 
 exit /b 0
