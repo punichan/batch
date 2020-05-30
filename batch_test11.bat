@@ -27,7 +27,7 @@ set TIME=[%date%:%time%]
 REM 処理を9999回続ける。
 for /l %%n in (1,1,9999) do (
     REM CHECK_DISKスケジューラの状態を変数に収納
-    schtasks /query /tn %SCH% /fo csv /nh > %RMPFLE%
+    schtasks /query /tn %SCH% /fo csv /nh > %TMPFLE%
     for /f "delims=, tokens=1-3 USEBACKQ" %%a in (%TMPFLE%) do (
         set STAT=%%c
         REM　一時ファイルを削除
