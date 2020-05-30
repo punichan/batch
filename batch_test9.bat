@@ -1,7 +1,7 @@
  @echo off
 setlocal enabledelayedexpansion
 
-set TIME=[%date%]
+set TIME=[%date%:%time%]
 
 REM ŠÂ‹«•Ï”‚ğƒZƒbƒg‚·‚é
 set WARN=50
