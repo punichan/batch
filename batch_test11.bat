@@ -37,7 +37,7 @@ for /l %%n in (1,1,9999) do (
     REM スケジューラの状態比較
     if "!STAT!" equ "実行中" (
         REM 60分スリーブさせる
-        ping -n 3600 127.0.0.1 > nul
+        powershell sleep 3600 > nul
         del /q %~dp0null
 
     ) else (
@@ -53,7 +53,7 @@ for /l %%n in (1,1,9999) do (
             )
 
         REM 60分スリーブさせる
-        ping -n 3600 127.0.0.1 > nul
+        powershell sleep 3600 > nul
         del /q %~dp0null
     )
 )
