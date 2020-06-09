@@ -23,27 +23,35 @@ $END=Get-Date (Get-Date).AddDays(-1) -format "yyyy/MM/dd 23:59:59"
 
 # APPイベントログの存在確認
 Get-EventLog -LogName Application -source * -After $START -Before $END
+$RETURN_APP=$?
 
 # APPログが存在する場合
-if ("$?" -eq "True") {
+if ("$RETURN_APP" -eq "True") {
     Get-EventLog -LogName Application -source * -After $START -Before $END > $APP_LOGFILE
 }
 
 # SYSイベントログの存在確認
 Get-EventLog -LogName System -source * -After $START -Before $END
+$RETURN_SYS=$?
 
 # APPログが存在する場合
-if ("$?" -eq "True") {
+if ("$RETURN_SYS" -eq "True") {
     Get-EventLog -LogName System -source * -After $START -Before $END > $SYS_LOGFILE
 }
 
-# APPイベントログの存在確認
+# SECイベントログの存在確認
 Get-EventLog -LogName Security -source * -After $START -Before $END
+$RETURN_SEC=$?
 
 # APPログが存在する場合
-if ("$?" -eq "True") {
+if ("$RETURN_SEC" -eq "True") {
     Get-EventLog -LogName Security -source * -After $START -Before $END > $SEC_LOGFILE
 }
+
+
+if ("$RETURN_APP" -and "$RETURN_SYS" -and "$RETURN_SEC" -eq "True") {
+    exit 0
+} 
 
 ####################################################################################################
 #参考

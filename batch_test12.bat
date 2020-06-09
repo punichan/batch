@@ -17,13 +17,13 @@ REM ############################################################################
 REM イベントログフォルダ
 set LOG_FO = C:\log\eventlog
 
-
 REM C:\log\eventlogがない場合
 if not exist %LOG_FO% (
     REM C:\log\eventlogを作成する。
     md log/eventlog
 )
 
+powershell -NoProfile -ExecutionPolicy Unrestricted C:\Work\batch_test12.ps1
 
 REM ####################################################################################################
 REM #参考サイト一覧
