@@ -14,9 +14,25 @@ REM #出力ファイル
 REM #　
 REM ####################################################################################################
 
+set LIST_FILE=%~dp0batch_test13.lst
 
+REM batch_test13.lstの存在確認
+if not exist %LIST_FILE% (
+    REM  存在しない場合、異常終了
+    exit /b 1
+)
+
+REM リフレッシュ対象ファイルの存在確認
+for /f "delims=," %%a in (%LIST_FILE%) do (
+    
+    if exist %%a (
+        set REF_DATE=powershell Get-Date (Get-Date).AddDays(-1) -format "yyyyMMdd"
+        type %%a > %%b\%%a.!REF_DATE!
+    )
+)
 REM ####################################################################################################
 REM #参考サイト一覧
+REM バッチ内のパワーシェルの呼び出し：https://microsoftou.com/powershell-if/
 
 REM ####################################################################################################
 
