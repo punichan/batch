@@ -13,8 +13,13 @@ REM #  1 異常終了
 REM #出力ファイル
 REM #　
 REM ####################################################################################################
-
 set LIST_FILE=%~dp0batch_test13.lst
+
+powershell Get-Date (Get-Date).AddDays(-1) -format "yyyyMMdd" > C:\Work\log1.txt
+for /f %%a in (C:\Work\log1.txt) do (
+	set REF_DATE=%%a
+	del /q C:\Work\log1.txt
+)
 
 REM batch_test13.lstの存在確認
 if not exist %LIST_FILE% (
@@ -23,17 +28,20 @@ if not exist %LIST_FILE% (
 )
 
 REM リフレッシュ対象ファイルの存在確認
-for /f "delims=," %%a in (%LIST_FILE%) do (
-    
-    if exist %%a (
-        set REF_DATE=powershell Get-Date (Get-Date).AddDays(-1) -format "yyyyMMdd"
-        type %%a > %%b\%%a.!REF_DATE!
+for /f "delims=, tokens=1-3" %%b in (%LIST_FILE%) do (
+	set TRAGET_FLE=%%b
+	set REF_FLE=%%c
+	set HOLD_DATE=%%d
+
+    if exist !TRAGET_FLE! (
+        type !TRAGET_FLE! > !TRAGET_FLE!.%REF_DATE%
+	null > !TRAGET_FLE!
     )
 )
 REM ####################################################################################################
 REM #参考サイト一覧
 REM バッチ内のパワーシェルの呼び出し：https://microsoftou.com/powershell-if/
-
+REM ファイルを空にする方法：https://japanrock-pg.hatenablog.com/entry/20080819/1219126642
 REM ####################################################################################################
 
 REM ####################################################################################################
